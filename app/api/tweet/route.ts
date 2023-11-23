@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     })
 
     const total = await prisma.post.count()
-    const response = { total, data, currentPage: page, totalPage: Math.ceil(total / limit), date }
+    const response = { total, tweet: data, currentPage: page, totalPage: Math.ceil(total / limit), date }
     return Response.json({ data: response })
 }
 
