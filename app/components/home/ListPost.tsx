@@ -63,7 +63,7 @@ function ListPost() {
         }
       })
       .then((res) => {
-        if (res?.data) {
+        if (res?.data?.tweet) {
           const data: Tweet[] = res.data.tweet;
           setLoadingNewTweet(StatusLoading.Success);
           setDateQuery(res.data.date);
@@ -117,12 +117,11 @@ function ListPost() {
         }
       })
       .then((res) => {
-        console.log(res.data);
         setLoadingNewreply(StatusLoading.Success);
         setOpenModalNewTweet(false);
         onAddNewTweet(res.data);
       })
-      .catch((err) => setLoadingNewreply(StatusLoading.Error));
+      .catch((err) => {setLoadingNewreply(StatusLoading.Error)});
   }
 
   return (
