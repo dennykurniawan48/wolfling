@@ -63,11 +63,13 @@ function ListPost() {
         }
       })
       .then((res) => {
-        const data: Tweet[] = res.data.tweet;
-        setLoadingNewTweet(StatusLoading.Success);
-        setDateQuery(res.data.date);
-        setHasnextPage(res.data.currentPage < res.data.totalPage);
-        setNewestTweet((prev) => [...prev, ...data]);
+        if (res?.data) {
+          const data: Tweet[] = res.data.tweet;
+          setLoadingNewTweet(StatusLoading.Success);
+          setDateQuery(res.data.date);
+          setHasnextPage(res.data.currentPage < res.data.totalPage);
+          setNewestTweet((prev) => [...prev, ...data]);
+        }
       })
       .catch((err) => {
         setLoadingNewTweet(StatusLoading.Error);
@@ -138,7 +140,7 @@ function ListPost() {
         onClose={onSetUsernameClose}
       />
       <div className="w-full flex flex-col justify-between items-end p-4 rounded-lg  space-y-3">
-        {/* {newestTweet.map((item, index) =>
+        {newestTweet.map((item, index) =>
           index + 1 == newestTweet.length ? (
             <Tweet
               ref={lasTweetRef}
@@ -149,12 +151,12 @@ function ListPost() {
           ) : (
             <Tweet key={item.id} data={item} onReplyClicked={onReplyClick} />
           )
-        )} */}
+        )}
         {loadingNewTweet == StatusLoading.Loading && (
-            <div className="w-full text-center p-4">
-              <span>Loading...</span>
-            </div>
-          )}
+          <div className="w-full text-center p-4">
+            <span>Loading...</span>
+          </div>
+        )}
       </div>
     </>
   );
