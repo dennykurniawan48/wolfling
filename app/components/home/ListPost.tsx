@@ -138,12 +138,7 @@ function ListPost() {
         onClose={onSetUsernameClose}
       />
       <div className="w-full flex flex-col justify-between items-end p-4 rounded-lg  space-y-3">
-      {newestTweet.length == 0 && (
-            <div className="w-full text-center p-4">
-              <span>Loading...</span>
-            </div>
-          )}
-        {newestTweet.map((item, index) =>
+        {/* {newestTweet.map((item, index) =>
           index + 1 == newestTweet.length ? (
             <Tweet
               ref={lasTweetRef}
@@ -154,7 +149,7 @@ function ListPost() {
           ) : (
             <Tweet key={item.id} data={item} onReplyClicked={onReplyClick} />
           )
-        )}
+        )} */}
         {loadingNewTweet == StatusLoading.Loading && (
             <div className="w-full text-center p-4">
               <span>Loading...</span>
