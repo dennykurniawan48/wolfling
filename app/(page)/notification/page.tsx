@@ -38,7 +38,7 @@ async function Page() {
 
   await prisma.notification.updateMany({
     where: {
-      userFrom: user?.id,
+      userFrom: user?.user.id,
     },
     data: {
       opened: true,
