@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String? 
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  tweets        Post[]
+  likes          Like[]
+  following     User[]    @relation("UserFollows")
+  follower      User[]    @relation("UserFollows")
+  password      String?
+  username      String?   @unique
+  bio           String?
+  receivedNotification    Notification[] @relation("origin_user")
+  sendedNotification      Notification[] @relation("destination_user")
+}
+
+model Post{
+  id          String    @id @default(cuid())
+  content     String?
+  postedBy    String
+  likes       Like[]
+  repliedTo   String?
+  retweetFrom String?
+  retweets    Post[]   @relation("DataRetweets")
+  data        Post?  @relation("DataRetweets", fields: [retweetFrom], references: [id], onDelete: Cascade)
+  replies     Post[]    @relation("PostReplies")
+  post       Post?     @relation("PostReplies", fields: [repliedTo], references: [id], onDelete: Cascade)
+  user User @relation(fields: [postedBy], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
+model Like{
+  id          String    @id @default(cuid())
+  userId      String
+  postId      String 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Notification{
+  id        String  @id @default(cuid())
+  userFrom    String
+  userTo    String
+  type      String
+  opened    Boolean @default(false) 
+  OriginUser User @relation("origin_user",fields: [userFrom], references: [id], onDelete: Cascade)
+  DestinationUser User @relation("destination_user",fields: [userTo], references: [id], onDelete: Cascade)
+}
