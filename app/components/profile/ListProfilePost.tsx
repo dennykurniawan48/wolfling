@@ -141,7 +141,7 @@ function ListProfilePost({ username }: { username: string }) {
         {
           newestTweet.length == 0 && loadingNewTweet == StatusLoading.Success &&
           <div className="w-full justify-center items-center text-center pt-6">
-              <span className="text-sm">This user didn't tweet anything yet.</span>
+              <span className="text-sm">This user didn&apos;t tweet anything yet.</span>
           </div>
         }
         {newestTweet.map((item, index) =>
