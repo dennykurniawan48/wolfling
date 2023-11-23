@@ -39,7 +39,7 @@ function Page() {
         <form method='POST' onSubmit={login.handleSubmit} className='flex flex-col w-72'>
         <span className="text-xl w-full text-center">Login</span>
             <div className="flex flex-row items-center mt-2 justify-center space-x-2">
-              <span className="text-sm text-center">Don't have account? </span>
+              <span className="text-sm text-center">Don&apos;t have account? </span>
               <Link
                 href={"/register"}
                 className="text-sm text-center text-blue-600"
