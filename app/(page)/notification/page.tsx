@@ -8,13 +8,13 @@ import React from "react";
 async function Page() {
   const user = await getServerSession(authOptions as AuthOptions);
   await pusherServer.trigger(
-    toPusherKey(`user:${user?.id}:notification`),
+    toPusherKey(`user:${user?.user.id}:notification`),
     "clear_notification",
     0
   );
   const notification = await prisma.notification.findMany({
     where: {
-      userTo: user?.id,
+      userTo: user?.user.id,
     },
     include: {
       DestinationUser: {
