@@ -21,35 +21,37 @@ export async function GET(req: NextRequest) {
 
     const tweet = await prisma.post.findMany({
         where: { createdAt: { lte: date } },
-        include: { 
-            user: {select:{id: true, username: true, name: true, image: true}}, 
+        include: {
+            user: { select: { id: true, username: true, name: true, image: true } },
             post: {
-                 include: { user: {
-                        select:{
-                        id: true,
-                        username: true
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            username: true
+                            , name: true, image: true
                         }
                     }
-                } 
+                }
             }, data: {
-                include: { 
-                    user:{
-                        select:{
-                            id: true, username: true, name: true, image: true
-                        }
-                    }
-                } 
-            }, 
-            retweets: {
-                select:{
-                    id: true,
-                    user:{
-                        select:{
+                include: {
+                    user: {
+                        select: {
                             id: true, username: true, name: true, image: true
                         }
                     }
                 }
-            }, 
+            },
+            retweets: {
+                select: {
+                    id: true,
+                    user: {
+                        select: {
+                            id: true, username: true, name: true, image: true
+                        }
+                    }
+                }
+            },
             likes: {
                 select: {
                     id: true,
@@ -64,7 +66,7 @@ export async function GET(req: NextRequest) {
     const data = tweet.map(item => {
         const retweteed = item.retweets.some(ret => ret.user.id == userId)
         const liked = item.likes.some(ret => ret.userId == userId)
-        return {...item, retweteed, liked}
+        return { ...item, retweteed, liked }
     })
 
     const total = await prisma.post.count()
@@ -111,17 +113,17 @@ export async function POST(req: NextRequest) {
                             }
                         }
                     }
-                }, 
+                },
                 retweets: {
-                    select:{
+                    select: {
                         id: true,
-                        user:{
-                            select:{
+                        user: {
+                            select: {
                                 id: true, username: true
                             }
                         }
                     }
-                }, 
+                },
                 likes: {
                     select: {
                         id: true,
@@ -130,7 +132,7 @@ export async function POST(req: NextRequest) {
                 }
             }
         })
-        
+
         return Response.json({ data: tweet })
     }
 }
