@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
                     id: true,
                     user:{
                         select:{
-                            id: true, username: true
+                            id: true, username: true, name: true, image: true
                         }
                     }
                 }
