@@ -24,15 +24,15 @@ export async function POST(req: Request) {
         const match = bcrypt.compareSync(data.password, user.password);
 
         const newObject = Object.fromEntries( // remove password from response 
-                    Object.entries(user).filter(([key]) => key !== 'password')
+            Object.entries(user).filter(([key]) => key !== 'password')
         );
 
-        if(match){
+        if (match) {
             const token = jwt.sign(newObject, process.env.NEXTAUTH_SECRET, { expiresIn: expirationTime })
-            const data = {...newObject, accessToken: token, expiresIn: expirationTime, google: false}
+            const data = { ...newObject, accessToken: token, expiresIn: expirationTime, google: false }
             return Response.json({ data })
-        }else{
-            return Response.json({ error: "Wrong username / password" }, { status: 401 })    
+        } else {
+            return Response.json({ error: "Wrong username / password" }, { status: 401 })
         }
     } catch (e) {
         console.log(e)
