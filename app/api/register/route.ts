@@ -25,7 +25,10 @@ export async function POST(request: Request) {
                 }
             }
         })
-        return Response.json(response)
+
+        const {password, ...rest} = response
+
+        return Response.json(rest)
     } catch (e) {
         console.log(e)
         return NextResponse.json({ error: "Invalid request" }, { status: 405 })
