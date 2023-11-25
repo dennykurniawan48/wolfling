@@ -133,7 +133,9 @@ export async function POST(req: NextRequest) {
             }
         })
 
-        return Response.json({ data: tweet })
+        const response = { ...tweet, retweeted: false, liked: false }
+
+        return Response.json({ data: response })
     }
 }
 
