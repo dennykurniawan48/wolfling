@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
                         username: searchParams.get("username")
                     }
                 })
-                return Response.json({ data: updated })
+                const {password, ...rest} = updated
+                return Response.json({ data: rest })
             }
             return NextResponse.json({ error: "Username already taken" }, { status: 409 })
         }
