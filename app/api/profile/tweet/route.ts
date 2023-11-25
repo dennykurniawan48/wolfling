@@ -21,7 +21,7 @@ export async function GET(req: Request) {
                             user: {
                                 select: {
                                     id: true,
-                                    username: true
+                                    username: true, name: true, image: true
                                 }
                             }
                         }
@@ -54,9 +54,9 @@ export async function GET(req: Request) {
                 take: limit, skip: (page - 1) * limit,
                 orderBy: { createdAt: "desc" },
             })
-            const total = await prisma.post.count({where: {postedBy: user.id}})
+            const total = await prisma.post.count({ where: { postedBy: user.id } })
             const response = { total, tweet, currentPage: page, totalPage: Math.ceil(total / limit), date }
-            return Response.json({data:response})
+            return Response.json({ data: response })
         } else {
             return NextResponse.json({ error: "User not found" }, { status: 404 })
         }
