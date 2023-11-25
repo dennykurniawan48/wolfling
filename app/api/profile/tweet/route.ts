@@ -1,13 +1,24 @@
 import { prisma } from "@/app/util/prisma"
-import { NextResponse } from "next/server"
+import { getToken } from "next-auth/jwt"
+import { NextRequest, NextResponse } from "next/server"
+const jwt = require("jsonwebtoken")
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const currentDate = searchParams.get("date") ?? Date()
     const date = new Date(currentDate)
     const page: number = Number(searchParams.get("page") ?? 1)
     const limit: number = Number(searchParams.get("limit") ?? 5)
     const username = searchParams.get("username") ?? null
+
+    let userId = "non-exist-user-id"
+    try {
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET, raw: true })
+        const user = jwt.verify(token, process.env.NEXTAUTH_SECRET)
+        userId = user.id
+    } catch (e) {
+
+    }
 
     if (username) {
         const user = await prisma.user.findUnique({ where: { username: username } })
@@ -54,8 +65,15 @@ export async function GET(req: Request) {
                 take: limit, skip: (page - 1) * limit,
                 orderBy: { createdAt: "desc" },
             })
+
+            const data = tweet.map(item => {
+                const retweteed = item.retweets.some(ret => ret.user.id == userId)
+                const liked = item.likes.some(ret => ret.userId == userId)
+                return { ...item, retweteed, liked }
+            })
+
             const total = await prisma.post.count({ where: { postedBy: user.id } })
-            const response = { total, tweet, currentPage: page, totalPage: Math.ceil(total / limit), date }
+            const response = { total, tweet: data, currentPage: page, totalPage: Math.ceil(total / limit), date }
             return Response.json({ data: response })
         } else {
             return NextResponse.json({ error: "User not found" }, { status: 404 })
