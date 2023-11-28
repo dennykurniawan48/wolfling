@@ -33,6 +33,15 @@ export async function GET(req: NextRequest){
             },
           });
 
+          await prisma.notification.updateMany({
+            where:{
+                userTo: user.id,
+                opened: false
+            },data:{
+                opened: true
+            }
+          })
+
           await pusherServer.trigger(toPusherKey(`user:${user.id}:notification`), "clear_notification", 0)
 
         return Response.json({ data: notification })
