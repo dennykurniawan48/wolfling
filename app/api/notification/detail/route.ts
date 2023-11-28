@@ -1,4 +1,5 @@
 import { prisma } from "@/app/util/prisma";
+import { pusherServer, toPusherKey } from "@/app/util/pusher/pusher";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 const jwt = require("jsonwebtoken")
@@ -31,6 +32,8 @@ export async function GET(req: NextRequest){
               },
             },
           });
+
+          await pusherServer.trigger(toPusherKey(`user:${user.id}:notification`), "clear_notification", 0)
 
         return Response.json({ data: notification })
     }
