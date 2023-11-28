@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest){
             }
         })
 
-        pusherServer.trigger(toPusherKey(`user:${user.id}:notification`), "clear_notification", 0)
+        await pusherServer.trigger(toPusherKey(`user:${user.id}:notification`), "clear_notification", 0)
 
         return Response.json({ data: { cleared: true } })
     }
