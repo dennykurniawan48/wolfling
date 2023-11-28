@@ -1,5 +1,4 @@
 import { prisma } from "@/app/util/prisma";
-import { pusherServer, toPusherKey } from "@/app/util/pusher/pusher";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 const jwt = require("jsonwebtoken")

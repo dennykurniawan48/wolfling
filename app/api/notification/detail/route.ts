@@ -11,7 +11,7 @@ export async function GET(req: NextRequest){
     if (user) {
         const notification = await prisma.notification.findMany({
             where: {
-              userTo: user?.user.id,
+              userTo: user.id,
             },
             include: {
               DestinationUser: {
