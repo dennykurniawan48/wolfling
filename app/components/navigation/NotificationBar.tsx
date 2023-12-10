@@ -95,7 +95,7 @@ function NotificationBar() {
       <div className="w-full flex">
         {status === "authenticated" &&
           <div className="flex w-full justify-between items-center p-4">
-            <span className="flex-1 justify-center text-center items-center pr-4 overflow-ellipsis">
+            <span className="flex-1 justify-center text-center items-center pr-4 overflow-ellipsis text-sm">
               {session.user?.name}
             </span>
             <button
