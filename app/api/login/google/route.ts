@@ -25,9 +25,9 @@ export async function GET(req: Request) {
                         name: result.data?.name,
                         accounts: {
                             create: {
-                                type: "google",
+                                type: "oauth",
                                 provider: "google",
-                                providerAccountId: result.data?.aud ?? randomUUID()
+                                providerAccountId: result.data?.sub ?? randomUUID()
                             }
                         }
                     }
